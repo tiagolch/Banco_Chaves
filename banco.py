@@ -11,7 +11,7 @@ extrato = []
 def consulta_saldo():
     global saldo
     print(f'Seu saldo é R${saldo}')
-    return saldo
+    #return saldo
 
 
 def consulta_extrato():
@@ -20,7 +20,7 @@ def consulta_extrato():
     for i in extrato:
         print(i)
     print('+' * 30)
-    return extrato
+
 
 
 def deposito(x):
@@ -37,12 +37,12 @@ def saque(valor):
         extrato.append(f'Dia - {str(date.today())} Valor - {str(valor)} -- Saldo {str(saldo)}')
     else:
         print(f'Não ha saldo suficiente, saldo atual R${saldo}')
-    return saldo
+
 
 
 opcao = 0
 while opcao != 5:
-    print(f'Seu saldo atual é R${saldo}')
+    #print(f'Seu saldo atual é R${saldo}')
     print('O que deseja?')
     print('===============')
     print('1: Depositar')
