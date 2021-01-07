@@ -22,11 +22,14 @@ def consulta_extrato():
     print('+' * 30)
 
 
-
 def deposito(x):
-    global saldo
-    saldo += x
-    return saldo
+    if x < 0:
+        print(f'{x} Não é um deposito valido')
+    else:
+        global saldo
+        saldo += x
+        extrato.append(f'Dia - {str(date.today())} Valor +{str(valor)} -- Saldo {str(saldo)}')
+        return saldo
 
 
 def saque(valor):
@@ -34,7 +37,7 @@ def saque(valor):
     global extrato
     if int(valor) <= saldo:
         saldo -= valor
-        extrato.append(f'Dia - {str(date.today())} Valor - {str(valor)} -- Saldo {str(saldo)}')
+        extrato.append(f'Dia - {str(date.today())} Valor -{str(valor)} -- Saldo {str(saldo)}')
     else:
         print(f'Não ha saldo suficiente, saldo atual R${saldo}')
 
@@ -57,9 +60,11 @@ while opcao != 5:
     if opcao == 1:
         valor = float(input('Qual valor para Deposito? R$'))
         saldo = deposito(valor)
+
     elif opcao == 2:
         valor = float(input('Qual valor para Saque? R$'))
         saque(valor)
+
     elif opcao == 3:
         consulta_saldo()
     elif opcao == 4:
