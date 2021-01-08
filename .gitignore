@@ -1,2 +1,9 @@
 venv
 .idea
+.env
+conta/migrations
+db.sqlite3
+manage.py
+conta/__init__.py
+conta/__pycache__/
+conta/tests.py
