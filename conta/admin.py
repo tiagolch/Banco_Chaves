@@ -4,4 +4,4 @@ from .models import Contas
 
 @admin.register(Contas)
 class ContasAdmin(admin.ModelAdmin):
-    list_display = ['agencia', 'conta', 'saldo', 'get_ultima_movimentacao']
+    list_display = ['agencia', 'conta', 'saldo']
