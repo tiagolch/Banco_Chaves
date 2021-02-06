@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save
+# from django.db.models import F
 from django.dispatch import receiver
-from django.db.models import F
 
 
 class Contas(models.Model):
@@ -27,11 +27,11 @@ class Deposito(models.Model):
 
     def get_data_deposito(self):
         return self.data_deposito.strftime('%d/%m/%Y %H:%M')
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            Contas.objects.filter(pk=self.conta_id).update(saldo=F('saldo') + self.valor)
-        super().save(*args, **kwargs)
+    #
+    # def save(self, *args, **kwargs):
+    #     if not self.pk:
+    #         Contas.objects.filter(pk=self.conta_id).update(saldo=F('saldo') + self.valor)
+    #     super().save(*args, **kwargs)
 
 
 class Saque(models.Model):
@@ -44,9 +44,20 @@ class Saque(models.Model):
 
     def get_data_saque(self):
         return self.data_saque.strftime('%d/%m/%Y %H:%M')
+    #
+    # def save(self, *args, **kwargs):
+    #     if not self.pk:
+    #         Contas.objects.filter(pk=self.conta_id).update(saldo=F('saldo') - self.valor)
+    #     super().save(*args, **kwargs)
 
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            Contas.objects.filter(pk=self.conta_id).update(saldo=F('saldo') - self.valor)
-        super().save(*args, **kwargs)
 
+@receiver(post_save, sender=Deposito)
+def update_saldo(sender, instance, **kwargs):
+    instance.conta.saldo += instance.valor
+    instance.conta.save()
+
+
+@receiver(post_save, sender=Saque)
+def update_saldo(sender, instance, **kwargs):
+    instance.conta.saldo -= instance.valor
+    instance.conta.save()
