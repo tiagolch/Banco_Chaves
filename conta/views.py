@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from conta.models import Contas, Deposito
-from conta.serializer import ContaSerializer, DepositoSerializer
+from conta.models import Contas, Deposito, Saque
+from conta.serializer import ContaSerializer, DepositoSerializer, SaqueSerializer
 
 
 class ContasViewSet(viewsets.ModelViewSet):
@@ -11,3 +11,8 @@ class ContasViewSet(viewsets.ModelViewSet):
 class DepositoViewSet(viewsets.ModelViewSet):
     queryset = Deposito.objects.all()
     serializer_class = DepositoSerializer
+
+
+class SaqueViewSet(viewsets.ModelViewSet):
+    queryset = Saque.objects.all()
+    serializer_class = SaqueSerializer

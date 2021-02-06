@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.db.models import F
 
 
 class Contas(models.Model):
@@ -27,8 +28,25 @@ class Deposito(models.Model):
     def get_data_deposito(self):
         return self.data_deposito.strftime('%d/%m/%Y %H:%M')
 
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            Contas.objects.filter(pk=self.conta_id).update(saldo=F('saldo') + self.valor)
+        super().save(*args, **kwargs)
 
-@receiver(post_save, sender=Deposito)
-def update_saldo(sender, instance, **kwargs):
-    instance.conta.saldo += instance.valor
-    instance.conta.save()
+
+class Saque(models.Model):
+    conta = models.ForeignKey('Contas', on_delete=models.CASCADE)
+    valor = models.DecimalField(decimal_places=2, max_digits=10, default=0.00)
+    data_saque = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Conta: {str(self.conta)} Saldo: {str(self.valor)}'
+
+    def get_data_saque(self):
+        return self.data_saque.strftime('%d/%m/%Y %H:%M')
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            Contas.objects.filter(pk=self.conta_id).update(saldo=F('saldo') - self.valor)
+        super().save(*args, **kwargs)
+
